@@ -5,9 +5,9 @@ class game : public olc::PixelGameEngine
 {
 
 public:
-	game()
+	game();
 
-
+  void draw();
 	
 
 	bool OnUserCreate()override;
