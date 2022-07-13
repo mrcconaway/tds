@@ -6,8 +6,9 @@ class game : public olc::PixelGameEngine
 
 public:
 	game();
-
-  void draw();
+public:
+	void draw();
+	void drawCrosshair(int x , int y);
 	
 
 	bool OnUserCreate()override;
