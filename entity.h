@@ -11,7 +11,7 @@
 class entity
 {
 public:
-	entity();
+	entity(std::string n = "", int s = 0, int h = 0, int d = 0);
 
 
 public:
