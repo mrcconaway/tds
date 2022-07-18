@@ -8,6 +8,9 @@ class game : public olc::PixelGameEngine
 public:
 	game();
 public:
+	void DrawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates,
+						    float x, float y, float r = 0.0f, float s = 1.0f, 
+						    const olc::Pixel= olc::WHITE);
 	void draw();
 	void drawPlayer();
 	void drawCrosshair();
@@ -23,12 +26,14 @@ private:
 	{
 		float x; 
 		float y;
+		float angle;
 		float vel;
 		int hp;
 		int dmg;
 	};
 
 	sEntity player;
+	std::vector<std::pair<float,float>> vecModelPlayer;
 
 
 

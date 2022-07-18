@@ -10,7 +10,7 @@ int main()
     // game construct
     game test;
 
-    test.Construct(screenWidth, screenHeight, 4, 4, false, true);
+    test.Construct(screenWidth, screenHeight, 4, 4);
     test.Start();
 
     return 0;

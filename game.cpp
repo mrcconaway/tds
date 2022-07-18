@@ -1,6 +1,7 @@
 #include "olcPixelGameEngine.h"
 #include "game.h"
 
+#include <vector>
 
 game::game(){
 	sAppName = "Top Down Shoot";
@@ -11,9 +12,16 @@ bool game::OnUserCreate()
 {
 	player = {float( ScreenHeight()/2),               // spawn location x
 			  float(ScreenWidth() - ScreenWidth()/4), // spawn location y
+			  45, 									  // angle
 			  defvel,                                 // velocity
 			  defhp,                                  // hp
 			  defdmg};                                // dmg 
+
+	// vecModelPlayer = {{player.x + 5, player.y - 5},
+	// 				  {player.x - 5, player.y - 5},
+	// 				//   {player.x + 5, player.y + 5},
+	// 				//   {player.x - 5, player.y + 5}
+	// 				 };
 
 
 	return true;
@@ -78,4 +86,44 @@ void game::drawPlayer()
       		PixelGameEngine::Draw(x, y, olc::Pixel(0,0,0));
 		}
 	}
+	// DrawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
+}
+
+void game::DrawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float s, const olc::Pixel)
+{
+
+	#include <iostream>
+	// pair.first = x coordinate
+	// pari.second = y coordinate
+
+ 	// Create translated model vector of coordinate pairs
+	std::vector<std::pair<float,float>> vecTransformedCoordinates;
+	int verts = vecModelCoordinates.size();
+	vecTransformedCoordinates.resize(verts);
+
+	// rotate
+	for(int i = 0 ; i < verts; i++){
+		vecTransformedCoordinates[i].first = vecModelCoordinates[i].first * cosf(r) - vecModelCoordinates[i].second * sinf(r);
+		vecTransformedCoordinates[i].second = vecModelCoordinates[i].first * sinf(r) + vecModelCoordinates[i].second * cosf(r);
+	}
+	// Scale
+	for(int i = 0 ; i < verts; i++){
+		vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first * s;
+		vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second * s;
+	}
+	// Translate
+	for(int i =0 ; i < verts; i++){
+		vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first+x;
+		vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second+y;
+	}
+	// Draw Closed Polygon
+	for(int i = 0; i < verts; i++){
+		std::cout << verts << std::endl;
+		std:: cout << vecTransformedCoordinates[i % verts].first << " " << vecTransformedCoordinates[i % verts].second << std::endl;
+		std::cout << ScreenWidth() << " " << ScreenHeight() << std::endl; 
+		int j = (i+1);
+		DrawLine(vecTransformedCoordinates[i % verts].first, vecTransformedCoordinates[i % verts].second, 
+				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second);
+	}
+
 }
