@@ -24,9 +24,16 @@ private:
 		float x; 
 		float y;
 		float vel;
-		float defvel;
+		int hp;
+		int dmg;
 	};
 
 	sEntity player;
 
+
+
+
+	float defvel = 50.0f;
+	int defhp = 100;
+	int defdmg = 25;
 };

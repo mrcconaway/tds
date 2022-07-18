@@ -9,10 +9,11 @@ game::game(){
 
 bool game::OnUserCreate()
 {
-	player = {float( ScreenHeight()/2),
-			  float(ScreenWidth() - ScreenWidth()/4),
-			  50.0f,
-			  50.0f };
+	player = {float( ScreenHeight()/2),               // spawn location x
+			  float(ScreenWidth() - ScreenWidth()/4), // spawn location y
+			  defvel,                                 // velocity
+			  defhp,                                  // hp
+			  defdmg};                                // dmg 
 
 
 	return true;
@@ -33,6 +34,7 @@ void game::getPlayerInput()
 	if(GetKey(olc::W).bHeld){
 		if(player.y > 0)
 			player.y -= player.vel*GetElapsedTime();
+
 	}
 	if(GetKey(olc::S).bHeld){
 		if(player.y < ScreenHeight())
