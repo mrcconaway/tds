@@ -27,6 +27,7 @@ bool game::OnUserCreate()
 					  { -5.0f , -6.0f }
 					 };
 
+
 	return true;
 }
 
@@ -36,6 +37,7 @@ bool game::OnUserUpdate(float fElapsedTime)
 	drawPlayer();
 	drawCrosshair();
 	getPlayerInput();
+	drawBullets();
 
 	return true;
 }
@@ -58,6 +60,11 @@ void game::getPlayerInput()
 	if(GetKey(olc::D).bHeld){
 		if(player.x < ScreenWidth())
 			player.x += player.vel*GetElapsedTime() * SWR;
+	}
+	if(GetMouse(0).bPressed){
+		#include <iostream>
+		std::cout << "BANG!" << std::endl;
+		vecBullets.push_back({player.x, player.y, 0, defvel, 1, 50});
 	}
 }
 
@@ -113,5 +120,13 @@ void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecMode
 		DrawLine(vecTransformedCoordinates[i % verts].first, vecTransformedCoordinates[i % verts].second, 
 				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second, p);
 	}
+}
 
+void game::drawBullets()
+{
+	for(auto &b : vecBullets){
+		b.x += b.vel * GetElapsedTime() * SWR;
+		b.y += b.vel * GetElapsedTime() * SHR;
+		PixelGameEngine::Draw(b.x, b.y);
+	}
 }

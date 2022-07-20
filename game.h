@@ -14,6 +14,7 @@ public:
 	void draw();
 	void drawPlayer();
 	void drawCrosshair();
+	void drawBullets();
 
 	void getPlayerInput();
 
@@ -34,7 +35,9 @@ private:
 
 	sEntity player;
 	std::vector<std::pair<float,float>> vecModelPlayer;
-
+	
+	std::vector<sEntity> vecBullets; // idea: use hp of a bullet for 'penetration' of enemies. 
+									 // Each enemy takes off 1 hp point (bullets defualt to 1 hp)
 
 
 
