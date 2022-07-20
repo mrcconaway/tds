@@ -41,6 +41,8 @@ private:
 	std::vector<sEntity> vecBullets; // idea: use hp of a bullet for 'penetration' of enemies. 
 									 // Each enemy takes off their respective hp point(s) (bullets defualt to 100 hp)
 
+	std::vector<sEntity> vecEnemy1;
+	std::vector<std::pair<float,float>> vecModelEnemy1;
 
 
 	float defvelX = 50.0f;
