@@ -141,6 +141,6 @@ void game::drawBullets()
 	for(auto &b : vecBullets){
 		b.x += b.dx * GetElapsedTime() * SWR;
 		b.y += b.dy * GetElapsedTime() * SHR;
-		PixelGameEngine::Draw(b.x, b.y);
+		DrawCircle(b.x, b.y, 0.5 *SWR );
 	}
 }
