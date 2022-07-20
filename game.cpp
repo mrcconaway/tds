@@ -10,19 +10,22 @@ game::game(){
 
 bool game::OnUserCreate()
 {
+	SWR = ScreenWidth() / 256.0f; // Screen Width Ratio
+	SHR = ScreenHeight() / 240.0f; // Screen Height Ratio
+
 	player = {float( ScreenHeight()/2),               // spawn location x
 			  float(ScreenWidth() - ScreenWidth()/4), // spawn location y
-			  45, 									  // angle
+			  0, 									  // angle
 			  defvel,                                 // velocity
 			  defhp,                                  // hp
 			  defdmg};                                // dmg 
 
-	vecModelPlayer = {{+5.0f,  -5.0f},
-					  {-5.0f,  -5.0f},
-					//   {player.x + 5, player.y + 5},
-					//   {player.x - 5, player.y + 5}
-					 };
 
+	vecModelPlayer = {{ -5.0f * SWR, +6.0f * SHR},
+					  { +5.0f * SWR, +6.0f * SHR},
+					  { +5.0f * SWR, -6.0f * SHR},
+					  { -5.0f * SWR, -6.0f * SHR}
+					 };
 
 	return true;
 }
@@ -41,20 +44,20 @@ void game::getPlayerInput()
 {
 	if(GetKey(olc::W).bHeld){
 		if(player.y > 0)
-			player.y -= player.vel*GetElapsedTime();
+			player.y -= player.vel*GetElapsedTime() * SHR;
 
 	}
 	if(GetKey(olc::S).bHeld){
 		if(player.y < ScreenHeight())
-			player.y += player.vel*GetElapsedTime();
+			player.y += player.vel*GetElapsedTime() * SHR;
 	}
 	if(GetKey(olc::A).bHeld){
 		if(player.x > 0)
-			player.x -= player.vel*GetElapsedTime();
+			player.x -= player.vel*GetElapsedTime() * SWR;
 	}
 	if(GetKey(olc::D).bHeld){
 		if(player.x < ScreenWidth())
-			player.x += player.vel*GetElapsedTime();
+			player.x += player.vel*GetElapsedTime() * SWR;
 	}
 }
 
@@ -71,25 +74,15 @@ void game::draw()
 
 void game::drawCrosshair()
 {
-	for(int x = (GetMouseX()) - 5; x < int(GetMouseX())+5; ++x){
-    	PixelGameEngine::Draw(x, int(GetMouseY()), olc::Pixel(0,0,0));
-	}
-	for(int y = int(GetMouseY()) - 5; y < int(GetMouseY())+5; ++y){
-    	PixelGameEngine::Draw(GetMouseX(), y, olc::Pixel(0,0,0));
-	}
+	DrawCircle(GetMouseX(), GetMouseY(), 3 * SWR / SHR, olc::Pixel(0,0,0));
 }
 
 void game::drawPlayer()
 {
-	// for(int x = player.x - 5; x < player.x+5; ++x){
-	// 	for(int y = player.y - 5; y < player.y+5; ++y){
-    //   		PixelGameEngine::Draw(x, y, olc::Pixel(0,0,0));
-	// 	}
-	// }
-	DrawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
+	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
 }
 
-void game::DrawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float s, const olc::Pixel)
+void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float s, const olc::Pixel p)
 {
 	// pair.first = x coordinate
 	// pari.second = y coordinate
@@ -118,7 +111,7 @@ void game::DrawWireFrameModel(const std::vector<std::pair<float,float>> &vecMode
 	for(int i = 0; i < verts; i++){
 		int j = (i+1);
 		DrawLine(vecTransformedCoordinates[i % verts].first, vecTransformedCoordinates[i % verts].second, 
-				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second);
+				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second, p);
 	}
 
 }
