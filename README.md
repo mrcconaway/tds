@@ -5,5 +5,5 @@ Run and shoot and survive. This is a game is for exploring polymorphism using th
 
 
 #### ToDo:
-* Add a basic player
-* Watch this video : https://www.youtube.com/watch?v=QgDR8LrRZhk
+* Look into how to best store different enemies
+* Look into rectangle v rectangle collisions = http://jeffreythompson.org/collision-detection/rect-rect.php
