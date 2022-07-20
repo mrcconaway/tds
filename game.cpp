@@ -75,13 +75,11 @@ void game::draw()
 void game::drawCrosshair()
 {
 	DrawCircle(GetMouseX(), GetMouseY(), 3 * SWR, olc::Pixel(0,0,0));
-	// DrawCircle(GetMouseX(), GetMouseY(), 3 * ScreenHeight() / SHR, olc::Pixel(0,0,0));
 }
 
 void game::drawPlayer()
 {
 	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
-	// drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
 }
 
 void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float sx, float sy, const olc::Pixel p)
