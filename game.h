@@ -15,10 +15,14 @@ public:
 	void drawPlayer();
 	void drawCrosshair();
 	void drawBullets();
+	void drawEnemies();
+
 
 	void getPlayerInput();
 
 	void removeBullets();
+	void removeEnemies();
+
 
 	bool OnUserCreate()override;
 	bool OnUserUpdate(float fElapsedTime) override;
@@ -41,6 +45,7 @@ private:
 	std::vector<sEntity> vecBullets; // idea: use hp of a bullet for 'penetration' of enemies. 
 									 // Each enemy takes off their respective hp point(s) (bullets defualt to 100 hp)
 
+	sEntity enemy1;
 	std::vector<sEntity> vecEnemy1;
 	std::vector<std::pair<float,float>> vecModelEnemy1;
 
