@@ -18,6 +18,7 @@ public:
 
 	void getPlayerInput();
 
+	void removeBullets();
 
 	bool OnUserCreate()override;
 	bool OnUserUpdate(float fElapsedTime) override;
@@ -27,8 +28,9 @@ private:
 	{
 		float x; 
 		float y;
+		float dx;
+		float dy;
 		float angle;
-		float vel;
 		int hp;
 		int dmg;
 	};
@@ -37,11 +39,12 @@ private:
 	std::vector<std::pair<float,float>> vecModelPlayer;
 	
 	std::vector<sEntity> vecBullets; // idea: use hp of a bullet for 'penetration' of enemies. 
-									 // Each enemy takes off 1 hp point (bullets defualt to 1 hp)
+									 // Each enemy takes off their respective hp point(s) (bullets defualt to 100 hp)
 
 
 
-	float defvel = 50.0f;
+	float defvelX = 50.0f;
+	float defvelY = 50.0f;
 	int defhp = 100;
 	int defdmg = 25;
 
