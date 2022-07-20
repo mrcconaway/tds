@@ -9,7 +9,7 @@ public:
 	game();
 public:
 	void drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates,
-						    float x, float y, float r = 0.0f, float s = 1.0f, 
+						    float x, float y, float r = 0.0f, float sx = 1.0f, float sy = 1.0f,
 						    const olc::Pixel p = olc::WHITE);
 	void draw();
 	void drawPlayer();

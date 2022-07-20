@@ -21,10 +21,10 @@ bool game::OnUserCreate()
 			  defdmg};                                // dmg 
 
 
-	vecModelPlayer = {{ -5.0f * SWR, +6.0f * SHR},
-					  { +5.0f * SWR, +6.0f * SHR},
-					  { +5.0f * SWR, -6.0f * SHR},
-					  { -5.0f * SWR, -6.0f * SHR}
+	vecModelPlayer = {{ -5.0f , +6.0f },
+					  { +5.0f , +6.0f },
+					  { +5.0f , -6.0f },
+					  { -5.0f , -6.0f }
 					 };
 
 	return true;
@@ -74,15 +74,17 @@ void game::draw()
 
 void game::drawCrosshair()
 {
-	DrawCircle(GetMouseX(), GetMouseY(), 3 * SWR / SHR, olc::Pixel(0,0,0));
+	DrawCircle(GetMouseX(), GetMouseY(), 3 * SWR, olc::Pixel(0,0,0));
+	// DrawCircle(GetMouseX(), GetMouseY(), 3 * ScreenHeight() / SHR, olc::Pixel(0,0,0));
 }
 
 void game::drawPlayer()
 {
-	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
+	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
+	// drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle);
 }
 
-void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float s, const olc::Pixel p)
+void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float sx, float sy, const olc::Pixel p)
 {
 	// pair.first = x coordinate
 	// pari.second = y coordinate
@@ -99,8 +101,8 @@ void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecMode
 	}
 	// Scale
 	for(int i = 0 ; i < verts; i++){
-		vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first * s;
-		vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second * s;
+		vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first * sx;
+		vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second * sy;
 	}
 	// Translate
 	for(int i =0 ; i < verts; i++){
