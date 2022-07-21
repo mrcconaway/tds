@@ -46,10 +46,10 @@ bool game::OnUserCreate()
 	vecEnemy1.push_back(enemy1);
 
 
-	vecModelEnemy1 = {{ -3.0f , +7.0f },
-					  { +3.0f , +7.0f },
-					  { +3.0f , -4.0f },
-					  { -3.0f , -4.0f }
+	vecModelEnemy1 = {{ -3.0f , +7.0f }, // bottom left
+					  { +3.0f , +7.0f }, // bottom right
+					  { +3.0f , -4.0f }, // top right
+					  { -3.0f , -4.0f } // top left
 					 };
 	return true;
 }
@@ -92,8 +92,27 @@ void game::getPlayerInput()
 		float distX = GetMouseX() - player.x;
 		float distY = GetMouseY() - player.y;
 		float distance = sqrtf(distX * distX + distY * distY );
-		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 100, 50});
+		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 1, 50});
 	}
+}
+
+bool game::hitDetection(const sEntity o)
+{
+	for(auto &e : vecEnemy1){
+		if(o.x <= e.x + vecModelEnemy1[2].first)
+		  {
+			return true;
+		  }
+
+		  	// vecModelEnemy1 = {{ -3.0f , +7.0f }, // bottom left
+					//   { +3.0f , +7.0f }, // bottom right
+					//   { +3.0f , -4.0f }, // top right
+					//   { -3.0f , -4.0f } // top left
+					//  };
+	}
+
+	return false;
+
 }
 
 void game::removeBullets()
@@ -173,7 +192,11 @@ void game::drawBullets()
 		b.x += b.dx * GetElapsedTime();
 		b.y += b.dy * GetElapsedTime();
 		DrawCircle(b.x, b.y, 0.5 *SWR );
-
+		if(hitDetection(b)){
+			b.hp -= 1;
+			#include <iostream>
+			std::cout << "Hit!" << std::endl;
+		}
 		// check for collision with enemy
 		// for(auto &e : vecEnemy1){
 		// 	if(IsPointInsideWireFrame())
