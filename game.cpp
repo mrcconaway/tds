@@ -98,17 +98,15 @@ void game::getPlayerInput()
 
 bool game::hitDetection(const sEntity o)
 {
+	int oX = int(o.x);
+	int oY = int(o.y);
 	for(auto &e : vecEnemy1){
-		if(o.x <= e.x + vecModelEnemy1[2].first)
-		  {
-			return true;
-		  }
-
-		  	// vecModelEnemy1 = {{ -3.0f , +7.0f }, // bottom left
-					//   { +3.0f , +7.0f }, // bottom right
-					//   { +3.0f , -4.0f }, // top right
-					//   { -3.0f , -4.0f } // top left
-					//  };
+		if(
+			oX <= int(e.x + vecModelEnemy1[1].first) &&
+			oX >= int(e.x + vecModelEnemy1[2].first ) &&
+			oY <= int(e.y + vecModelEnemy1[1].second) &&
+			oY >= int(e.y + vecModelEnemy1[3].second) 
+		   ){ e.hp -= o.dmg; return true; }
 	}
 
 	return false;
@@ -186,21 +184,12 @@ void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecMode
 void game::drawBullets()
 {
 	for(auto &b : vecBullets){
-		// b.x += b.dx * GetElapsedTime() * SWR;
-		// b.y += b.dy * GetElapsedTime() * SHR;
-		// DrawCircle(b.x, b.y, 0.5 *SWR );
 		b.x += b.dx * GetElapsedTime();
 		b.y += b.dy * GetElapsedTime();
 		DrawCircle(b.x, b.y, 0.5 *SWR );
 		if(hitDetection(b)){
 			b.hp -= 1;
-			#include <iostream>
-			std::cout << "Hit!" << std::endl;
 		}
-		// check for collision with enemy
-		// for(auto &e : vecEnemy1){
-		// 	if(IsPointInsideWireFrame())
-		// }
 	}
 }
 
