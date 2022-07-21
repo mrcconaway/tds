@@ -104,11 +104,10 @@ bool game::hitDetection(const sEntity o)
 		if(
 			oX <= int(e.x + vecModelEnemy1[1].first) &&
 			oX >= int(e.x + vecModelEnemy1[2].first ) &&
-			oY <= int(e.y + vecModelEnemy1[1].second) &&
-			oY >= int(e.y + vecModelEnemy1[3].second) 
+			oY >= int(e.y + vecModelEnemy1[3].second) && 
+			oY <= int(e.y + vecModelEnemy1[1].second) 
 		   ){ e.hp -= o.dmg; return true; }
 	}
-
 	return false;
 
 }
