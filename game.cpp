@@ -72,8 +72,16 @@ bool game::OnUserUpdate(float fElapsedTime)
 	if(vecBullets.size() > 0) removeBullets();
 	if(vecEnemy1.size() > 0) removeEnemies();
 
+	if(gameOver) reset();
+
 	return true;
 }
+
+void game::reset()
+{
+	// implement reset
+}
+
 
 void game::getPlayerInput()
 {
@@ -119,7 +127,17 @@ bool game::hitDetection(const sEntity o)
 
 bool game::playerHitDetection()
 {
-	// implement player hit detection
+		int pX = int(player.x);
+		int pY = int(player.y);
+		for(auto &e : vecEnemy1){
+			if(
+				pX <= int(e.x + vecModelEnemy1[2].first) &&
+				pX >= int(e.x + vecModelEnemy1[1].first) &&
+				pY <= int(e.y + vecModelEnemy1[1].second) && 
+				pY >= int(e.y + vecModelEnemy1[3].second)
+			){ return true; }
+		}
+		return false;
 }
 
 void game::removeBullets()

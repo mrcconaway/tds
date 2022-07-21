@@ -42,6 +42,7 @@ public:
 
 	bool OnUserCreate()override;
 	bool OnUserUpdate(float fElapsedTime) override;
+	void reset();
 
 private:
 	sEntity player;
