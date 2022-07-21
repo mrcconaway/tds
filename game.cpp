@@ -199,8 +199,6 @@ void game::drawEnemies()
 		float distX = player.x - e.x;
 		float distY = player.y - e.y;
 		float distance = sqrtf(distX * distX + distY * distY );
-		// vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 100, 50});
-		
 		e.x += e.dx * distX / distance * GetElapsedTime();
 		e.y += e.dy * distY/distance * GetElapsedTime();
 		drawWireFrameModel(vecModelEnemy1, e.x, e.y, e.angle, SWR, SHR, olc::Pixel(0,0,255));
