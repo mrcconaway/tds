@@ -34,6 +34,7 @@ public:
 	void getPlayerInput();
 
 	bool hitDetection(const sEntity o);
+	bool playerHitDetection();
 
 	void removeBullets();
 	void removeEnemies();
@@ -61,4 +62,6 @@ private:
 
 	float SWR; // Screen Width Ratio
 	float SHR; // Screen Height Ratio
+
+	bool gameOver;
 };

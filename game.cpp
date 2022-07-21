@@ -51,6 +51,12 @@ bool game::OnUserCreate()
 					  { +3.0f , -4.0f }, // top right
 					  { -3.0f , -4.0f } // top left
 					 };
+
+	
+	gameOver = false;
+
+
+
 	return true;
 }
 
@@ -109,7 +115,11 @@ bool game::hitDetection(const sEntity o)
 		   ){ e.hp -= o.dmg; return true; }
 	}
 	return false;
+}
 
+bool game::playerHitDetection()
+{
+	// implement player hit detection
 }
 
 void game::removeBullets()
@@ -145,6 +155,9 @@ void game::drawCrosshair()
 void game::drawPlayer()
 {
 	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
+	if(playerHitDetection()){
+		gameOver = true;
+	}
 }
 
 void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates, float x, float y, float r , float sx, float sy, const olc::Pixel p)
