@@ -1,6 +1,16 @@
+WFLAGS = -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
+LFLAGS = -lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17
 a.out:
-	g++ -o tds *.cpp -lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17
+	g++ -o tds *.cpp $(LFLAGS)
 	./tds
-w:
-	g++ -o tds *.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
+w: build
 	./tds
+build: main.cpp olcPixelGameEngine.o game.o
+	g++ -o tds *.cpp $(WFLAGS)
+olcPixelGameEngine.o: olcPixelGameEngine.h olcPixelGameEngine.cpp
+	g++ -c olcPixelGameEngine.cpp
+game.o: game.h game.cpp
+	g++ -c game.cpp
+clean:
+	-del *.o 
+	-rm *.o 
