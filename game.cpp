@@ -67,6 +67,22 @@ bool game::OnUserCreate()
 
 bool game::OnUserUpdate(float fElapsedTime)
 {
+	bool flag = true;
+	switch(state)
+	{
+		default: 
+			flag = false;
+			break;
+		PLAY:
+			play();
+			flag = true;
+			break;
+	}
+
+	return flag;
+}
+void game::play()
+{
     draw();
 	drawPlayer();
 	drawCrosshair();
@@ -78,8 +94,6 @@ bool game::OnUserUpdate(float fElapsedTime)
 	if(vecEnemy1.size() > 0) removeEnemies();
 
 	if(gameOver) reset();
-
-	return true;
 }
 
 void game::reset()
@@ -125,7 +139,7 @@ bool game::hitDetection(const sEntity o)
 		if(oX >= int(e.x) + int(vecModelEnemy1[0].first)  && // left side
 		   oX <= int(e.x) + int(vecModelEnemy1[1].first)  && // right side
 		   oY <= int(e.y) + int(vecModelEnemy1[0].second) && // top side
-		   oY >= int(e.y) + int(vecModelEnemy1[2].second)    // top side
+		   oY >= int(e.y) + int(vecModelEnemy1[2].second)    // bot side
 		  ){ e.hp -= o.dmg; return true;}
 	}
 	return false;
@@ -136,11 +150,10 @@ bool game::playerHitDetection()
 		int pX = int(player.x);
 		int pY = int(player.y);
 		for(auto &e : vecEnemy1){
-			if(
-				pX <= int(e.x + vecModelEnemy1[2].first) &&
-				pX >= int(e.x + vecModelEnemy1[1].first) &&
-				pY <= int(e.y + vecModelEnemy1[1].second) && 
-				pY >= int(e.y + vecModelEnemy1[3].second)
+			if(pX + int(vecModelPlayer[1].first) >= int(e.x) + int(vecModelEnemy1[0].first) &&   // p right edge past left e
+			   pX + int(vecModelPlayer[0].first) <= int(e.x) + int(vecModelEnemy1[1].first) &&   // p left edge past right e
+			   pY + int(vecModelPlayer[0].second) >= int(e.y) + int(vecModelEnemy1[2].second) && // p bot edge past top e
+			   pY + int(vecModelPlayer[3].second) <= int(e.y) + int(vecModelEnemy1[0].second)    // p top edge past bot e
 			){ return true; }
 		}
 		return false;

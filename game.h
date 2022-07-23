@@ -19,7 +19,13 @@ private:
 		int hp;
 		int dmg;
 	};
-
+	enum STATE
+	{
+		MENU,
+		PLAY,
+		PAUSE,
+		END
+	};
 public:
 	void drawWireFrameModel(const std::vector<std::pair<float,float>> &vecModelCoordinates,
 						    float x, float y, float r = 0.0f, float sx = 1.0f, float sy = 1.0f,
@@ -42,9 +48,13 @@ public:
 
 	bool OnUserCreate()override;
 	bool OnUserUpdate(float fElapsedTime) override;
+	void play();
 	void reset();
 
+
+
 private:
+	STATE state;
 	sEntity player;
 	std::vector<std::pair<float,float>> vecModelPlayer;
 	
