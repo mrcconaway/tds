@@ -6,7 +6,7 @@
 #include <chrono>
 
 game::game(){
-	sAppName = "Top Down Shoot";
+	sAppName = "Top Down Shooter";
 }
 
 
@@ -88,6 +88,7 @@ void game::reset()
 			  defvelY,                          	    // velocity y
 			  0, 									    // angle
 			  defhp,                                    // hp
+			  100,										// total hp
 			  defdmg};                                  // dmg 
 
 
@@ -102,7 +103,8 @@ void game::reset()
 			  defvelX/2,
 			  defvelY/2,
 			  0,
-			  defhp,
+			  100,
+			  100,
 			  defdmg };
 	vecEnemy1.push_back(enemy1);
 
@@ -143,7 +145,7 @@ void game::getPlayerInput()
 		float distX = GetMouseX() - player.x;
 		float distY = GetMouseY() - player.y;
 		float distance = sqrtf(distX * distX + distY * distY );
-		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 1, 50});
+		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 1,1, 50});
 	}
 }
 
@@ -158,7 +160,7 @@ bool game::hitDetection(const sEntity o)
 		   oX <= int(e.x) + int(vecModelEnemy1[1].first)  && // right side
 		   oY <= int(e.y) + int(vecModelEnemy1[0].second) && // top side
 		   oY >= int(e.y) + int(vecModelEnemy1[2].second)    // bot side
-		  ){ e.hp -= o.dmg; return true;}
+		  ){ e.hp -= o.dmg;  return true;}
 	}
 	return false;
 }
@@ -299,10 +301,11 @@ void game::drawEnemies()
 		e.x += e.dx * distX / distance * GetElapsedTime();
 		e.y += e.dy * distY/distance * GetElapsedTime();
 		drawWireFrameModel(vecModelEnemy1, e.x, e.y, e.angle, SWR, SHR, olc::Pixel(0,0,255));
-		// if(e.hp >= defhp){
-		// 	DrawLine(int(e.x + vecModelEnemy1[0].first), int(e.y + vecModelEnemy1[2].second), 
-		// 	         (int(e.x + vecModelEnemy1[0].first) + int(e.x + vecModelEnemy1[1].first))
-		// }
+		if(e.hp >= 0){
+			DrawLine(int(e.x + vecModelEnemy1[0].first), int(e.y + vecModelEnemy1[2].second)-2, 
+			         int(e.x +(vecModelEnemy1[1].first*(e.hp/e.totalhp))), 
+					 int(e.y + vecModelEnemy1[2].second)-2, olc::Pixel(255,0,0));
+		}
 	}
 }
 

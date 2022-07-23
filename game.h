@@ -18,6 +18,7 @@ private:
 		float dy;
 		float angle;
 		int hp;
+		int totalhp;
 		int dmg;
 	};
 	enum STATE
