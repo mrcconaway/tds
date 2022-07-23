@@ -228,19 +228,26 @@ void game::drawCrosshair()
 void game::drawPlayer()
 {
 	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
+	olc::Pixel p;
+	if(invuln){
+		p = olc::Pixel(224,213,126);
+	}
+	else{
+		p = olc::Pixel(255,0,0);
+	}
 	if(player.hp > 0){
-		DrawLine( ScreenWidth()/10, ScreenHeight()/10, ScreenWidth()/10 + ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+		DrawLine( ScreenWidth()/10, ScreenHeight()/10, ScreenWidth()/10 + ScreenWidth()/8,ScreenHeight()/10, p);
 	}
 	if(player.hp > 25){
-		DrawLine( ScreenWidth()/10 + ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 2*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+		DrawLine( ScreenWidth()/10 + ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 2*ScreenWidth()/8,ScreenHeight()/10, p);
 	}
 	if(player.hp > 50){
-		DrawLine( ScreenWidth()/10 + 2*ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 3*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+		DrawLine( ScreenWidth()/10 + 2*ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 3*ScreenWidth()/8,ScreenHeight()/10, p);
 	}
 	if(player.hp > 75){
-		DrawLine( ScreenWidth()/10 + 3*ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 4*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
-
+		DrawLine( ScreenWidth()/10 + 3*ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 4*ScreenWidth()/8,ScreenHeight()/10, p);
 	}
+	
 	if(playerHitDetection()){
 		if(player.hp <= 0) gameOver = true;
 	}
