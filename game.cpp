@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <random> 
-#include <time.h>
+#include <chrono>
 
 game::game(){
 	sAppName = "Top Down Shoot";
@@ -19,8 +19,69 @@ bool game::OnUserCreate()
 	SHR = ScreenHeight() / 240.0f; // Screen Height Ratio
 	defvelX = defvelX * SWR;
 	defvelY = defvelX * SHR;
+	reset();
 
+	return true;
+}
 
+bool game::OnUserUpdate(float fElapsedTime)
+{
+	switch(state)
+	{
+		default: 
+			onUserUpdateFlag = false;
+			break;
+		case PLAY:
+			play();
+			break;
+		case END:
+			end();
+			break;
+	}
+
+	return onUserUpdateFlag;
+}
+void game::play()
+{
+    draw();
+	if(invuln == true && (  getInvulnTime() > 3 ) ){
+		invuln = false;
+	}
+	drawPlayer();
+	drawCrosshair();
+	getPlayerInput();
+
+	drawEnemies();
+	drawBullets(); 
+	if(vecBullets.size() > 0) removeBullets();
+	if(vecEnemy1.size() > 0) removeEnemies();
+
+	spawnEnemies();
+
+	if(gameOver) state = END;
+}
+void game::end()
+{
+	// game is over, make it so enemies and player cannot move
+	enemy1.dx = 0.0f;
+	enemy1.dy = 0.0f;
+	draw();
+	drawPlayer();
+	drawCrosshair();
+	drawEnemies();
+	drawBullets(); 
+	if(vecBullets.size() > 0) removeBullets();
+    DrawString(ScreenWidth()/2, ScreenHeight() - ScreenHeight()/4, "Game Over!", olc::DARK_RED );
+}
+
+void game::reset()
+{
+	
+	onUserUpdateFlag = true;
+	state = PLAY;
+	gameOver = false;
+
+	invuln = false;
 	player = {float( ScreenWidth()/2),                  // spawn location x
 			  float(ScreenHeight() - ScreenHeight()/4), // spawn location y
 			  defvelX,                           	    // velocity x
@@ -36,15 +97,8 @@ bool game::OnUserCreate()
 					  { -5.0f , -6.0f }
 					 };
 
-	// enemy1 = {float(rand() % ScreenWidth() + 20), 
-	// 		  float(rand() % ScreenHeight() + 1), 
-	// 		  defvelX/2,
-	// 		  defvelY/2,
-	// 		  0,
-	// 		  defhp,
-	// 		  defdmg };
-	enemy1 = {float(ScreenWidth() / 2), 
-			  float(ScreenHeight()/2), 
+	enemy1 = {float(rand() % ScreenWidth() + 20), 
+			  float(rand() % ScreenHeight() + 1), 
 			  defvelX/2,
 			  defvelY/2,
 			  0,
@@ -58,47 +112,11 @@ bool game::OnUserCreate()
 					  { +3.0f , -4.0f }, // top right
 					  { -3.0f , -4.0f } // top left
 					 };
-
-	
-	gameOver = false;
-
-	return true;
 }
 
-bool game::OnUserUpdate(float fElapsedTime)
+void game::gameOverMenu()
 {
-	bool flag = true;
-	switch(state)
-	{
-		default: 
-			flag = false;
-			break;
-		PLAY:
-			play();
-			flag = true;
-			break;
-	}
-
-	return flag;
-}
-void game::play()
-{
-    draw();
-	drawPlayer();
-	drawCrosshair();
-	getPlayerInput();
-
-	drawEnemies();
-	drawBullets(); 
-	if(vecBullets.size() > 0) removeBullets();
-	if(vecEnemy1.size() > 0) removeEnemies();
-
-	if(gameOver) reset();
-}
-
-void game::reset()
-{
-	// implement reset
+	// implement
 }
 
 
@@ -154,7 +172,10 @@ bool game::playerHitDetection()
 			   pX + int(vecModelPlayer[0].first) <= int(e.x) + int(vecModelEnemy1[1].first) &&   // p left edge past right e
 			   pY + int(vecModelPlayer[0].second) >= int(e.y) + int(vecModelEnemy1[2].second) && // p bot edge past top e
 			   pY + int(vecModelPlayer[3].second) <= int(e.y) + int(vecModelEnemy1[0].second)    // p top edge past bot e
-			){ return true; }
+			){ 
+				if(!invuln){ player.hp -= e.dmg; invuln = true; invulnTimer = std::chrono::high_resolution_clock::now(); };
+				return true; 
+			}
 		}
 		return false;
 }
@@ -171,6 +192,19 @@ void game::removeEnemies(){
 	auto i = remove_if(vecEnemy1.begin(), vecEnemy1.end(), [&](sEntity o){return o.hp <=0; });
 	if( i != vecEnemy1.end()){
 		vecEnemy1.erase(i);
+	}
+}
+
+void game::spawnEnemies()
+{
+	int spawn = rand() % 10000 + 1;
+	if(spawn < 11){
+		do{
+			enemy1.x = float(rand() % ScreenWidth() );
+			enemy1.y = float(rand() % ScreenHeight() );
+		}while( ( (enemy1.x >= player.x+75) || (enemy1.x <= player.x-75) ) && 
+		        ( (enemy1.y >= player.y+75) || (enemy1.y <= player.y-75)) );
+		vecEnemy1.push_back(enemy1);
 	}
 }
 
@@ -193,7 +227,7 @@ void game::drawPlayer()
 {
 	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
 	if(playerHitDetection()){
-		gameOver = true;
+		if(player.hp <= 0) gameOver = true;
 	}
 }
 
@@ -253,4 +287,10 @@ void game::drawEnemies()
 		e.y += e.dy * distY/distance * GetElapsedTime();
 		drawWireFrameModel(vecModelEnemy1, e.x, e.y, e.angle, SWR, SHR, olc::Pixel(0,0,255));
 	}
+}
+
+int game::getInvulnTime()const
+{
+    std::chrono::high_resolution_clock::time_point tmp = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration_cast<std::chrono::seconds>(tmp - invulnTimer).count();
 }
