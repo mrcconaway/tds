@@ -204,8 +204,9 @@ void game::spawnEnemies()
 		do{
 			enemy1.x = float(rand() % ScreenWidth() );
 			enemy1.y = float(rand() % ScreenHeight() );
-		}while( ( (enemy1.x >= player.x+75) || (enemy1.x <= player.x-75) ) && 
-		        ( (enemy1.y >= player.y+75) || (enemy1.y <= player.y-75)) );
+		}while( 
+			( (enemy1.x - player.x)*(enemy1.x - player.x) + (enemy1.y - player.y)*(enemy1.y - player.y) ) <= 1000
+		 );
 		vecEnemy1.push_back(enemy1);
 	}
 }
@@ -247,7 +248,7 @@ void game::drawPlayer()
 	if(player.hp > 75){
 		DrawLine( ScreenWidth()/10 + 3*ScreenWidth()/8 + 2, ScreenHeight()/10, ScreenWidth()/10 + 4*ScreenWidth()/8,ScreenHeight()/10, p);
 	}
-	
+
 	if(playerHitDetection()){
 		if(player.hp <= 0) gameOver = true;
 	}
