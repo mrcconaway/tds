@@ -1,5 +1,6 @@
 #include "olcPixelGameEngine.h"
 #include "game.h"
+#include "scoreSystem.h"
 
 #include <vector>
 #include <random> 
@@ -80,6 +81,7 @@ void game::reset()
 	onUserUpdateFlag = true;
 	state = PLAY;
 	gameOver = false;
+	score = scoreSystem();
 
 	invuln = false;
 	player = {float( ScreenWidth()/2),                  // spawn location x
@@ -193,6 +195,7 @@ void game::removeBullets()
 void game::removeEnemies(){
 	auto i = remove_if(vecEnemy1.begin(), vecEnemy1.end(), [&](sEntity o){return o.hp <=0; });
 	if( i != vecEnemy1.end()){
+		score.incScore( i->totalhp/2);
 		vecEnemy1.erase(i);
 	}
 }
@@ -219,6 +222,10 @@ void game::draw()
 	      	PixelGameEngine::Draw(x, y, olc::Pixel(180,255,150));
         }
     }
+	if(!invuln)
+		DrawString(ScreenWidth()-ScreenWidth()/6, ScreenHeight()/10 - 2, std::to_string(score.getScore()), olc::Pixel(225,0,0) ); // draw score
+	else
+		DrawString(ScreenWidth()-ScreenWidth()/6, ScreenHeight()/10 - 2, std::to_string(score.getScore()), olc::Pixel(224,213,126) ); // draw score
 }
 
 void game::drawCrosshair()

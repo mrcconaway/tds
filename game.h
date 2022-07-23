@@ -1,4 +1,5 @@
 #include "olcPixelGameEngine.h"
+#include "scoreSystem.h"
 
 #include <vector>
 #include <chrono>
@@ -84,4 +85,6 @@ private:
 
 	bool gameOver;
 	bool onUserUpdateFlag;
+
+	scoreSystem score;
 };
