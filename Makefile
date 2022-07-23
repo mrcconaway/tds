@@ -9,7 +9,7 @@ build: main.cpp olcPixelGameEngine.o game.o
 	g++ -o tds main.cpp olcPixelGameEngine.o game.o $(WFLAGS)
 olcPixelGameEngine.o: olcPixelGameEngine.h olcPixelGameEngine.cpp
 	g++ -c olcPixelGameEngine.cpp
-game.o: game.h game.cpp
+game.o: game.h game.cpp scoreSystem.h
 	g++ -c game.cpp
 clean:
 	-del *.o 
