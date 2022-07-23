@@ -6,7 +6,7 @@ a.out:
 w: build
 	./tds
 build: main.cpp olcPixelGameEngine.o game.o
-	g++ -o tds *.cpp $(WFLAGS)
+	g++ -o tds main.cpp olcPixelGameEngine.o game.o $(WFLAGS)
 olcPixelGameEngine.o: olcPixelGameEngine.h olcPixelGameEngine.cpp
 	g++ -c olcPixelGameEngine.cpp
 game.o: game.h game.cpp

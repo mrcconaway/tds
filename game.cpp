@@ -36,8 +36,15 @@ bool game::OnUserCreate()
 					  { -5.0f , -6.0f }
 					 };
 
-	enemy1 = {float(rand() % ScreenWidth() + 20), 
-			  float(rand() % ScreenHeight() + 1), 
+	// enemy1 = {float(rand() % ScreenWidth() + 20), 
+	// 		  float(rand() % ScreenHeight() + 1), 
+	// 		  defvelX/2,
+	// 		  defvelY/2,
+	// 		  0,
+	// 		  defhp,
+	// 		  defdmg };
+	enemy1 = {float(ScreenWidth() / 2), 
+			  float(ScreenHeight()/2), 
 			  defvelX/2,
 			  defvelY/2,
 			  0,
@@ -54,8 +61,6 @@ bool game::OnUserCreate()
 
 	
 	gameOver = false;
-
-
 
 	return true;
 }
@@ -115,12 +120,13 @@ bool game::hitDetection(const sEntity o)
 	int oX = int(o.x);
 	int oY = int(o.y);
 	for(auto &e : vecEnemy1){
-		if(
-			oX <= int(e.x + vecModelEnemy1[1].first) &&
-			oX >= int(e.x + vecModelEnemy1[2].first ) &&
-			oY >= int(e.y + vecModelEnemy1[3].second) && 
-			oY <= int(e.y + vecModelEnemy1[1].second) 
-		   ){ e.hp -= o.dmg; return true; }
+		int oX = (o.x);
+		int oY = int(o.y);
+		if(oX >= int(e.x) + int(vecModelEnemy1[0].first)  && // left side
+		   oX <= int(e.x) + int(vecModelEnemy1[1].first)  && // right side
+		   oY <= int(e.y) + int(vecModelEnemy1[0].second) && // top side
+		   oY >= int(e.y) + int(vecModelEnemy1[2].second)    // top side
+		  ){ e.hp -= o.dmg; return true;}
 	}
 	return false;
 }
@@ -209,6 +215,7 @@ void game::drawWireFrameModel(const std::vector<std::pair<float,float>> &vecMode
 		DrawLine(vecTransformedCoordinates[i % verts].first, vecTransformedCoordinates[i % verts].second, 
 				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second, p);
 	}
+
 }
 
 void game::drawBullets()
