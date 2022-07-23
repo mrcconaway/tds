@@ -225,7 +225,23 @@ void game::drawCrosshair()
 
 void game::drawPlayer()
 {
+	#include <iostream>
+	using namespace std;
+	cout << player.hp << endl;
 	drawWireFrameModel(vecModelPlayer, player.x, player.y, player.angle, SWR, SHR);
+	if(player.hp > 0){
+		DrawLine( ScreenWidth()/10, ScreenHeight()/10, ScreenWidth()/10 + ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+	}
+	if(player.hp > 25){
+		DrawLine( ScreenWidth()/10 + ScreenWidth()/8, ScreenHeight()/10, ScreenWidth()/10 + 2*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+	}
+	if(player.hp > 50){
+		DrawLine( ScreenWidth()/10 + 2*ScreenWidth()/8, ScreenHeight()/10, ScreenWidth()/10 + 3*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+	}
+	if(player.hp > 75){
+		DrawLine( ScreenWidth()/10 + 3*ScreenWidth()/8, ScreenHeight()/10, ScreenWidth()/10 + 4*ScreenWidth()/8,ScreenHeight()/10, olc::Pixel(255,0,0));
+
+	}
 	if(playerHitDetection()){
 		if(player.hp <= 0) gameOver = true;
 	}
