@@ -1,0 +1,9 @@
+Todo:
+
+1) Add a shoot timer such that player cannot shoot infinitely fast (add firerate)
+2) Add a way for mutliple weapons
+3) See if you can refactor bullets
+    * Don't let bullets hit multiple enemies
+    * Get target ID and check against those target ids already hit
+    * Allow for penetration among enemies
+4) Need to add unique target IDs
