@@ -92,6 +92,7 @@ void game::reset()
 			  defhp,                                    // hp
 			  100,										// total hp
 			  defdmg,                                   // dmg 
+			  'p',										// player id
 			  defluck};									// default luck
 
 
@@ -108,9 +109,11 @@ void game::reset()
 			  0,
 			  100,
 			  100,
-			  defdmg, 
+			  defdmg,
+			  'e', 
 			  defluck};
-	vecEnemy1.push_back(enemy1);
+	vecEntity.push_back(player);
+	vecEntity.push_back(enemy1);
 
 
 	vecModelEnemy1 = {{ -3.0f , +7.0f }, // bottom left
@@ -149,21 +152,21 @@ void game::getPlayerInput()
 		float distX = GetMouseX() - player.x;
 		float distY = GetMouseY() - player.y;
 		float distance = sqrtf(distX * distX + distY * distY );
-		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 1,1, 50});
+		vecBullets.push_back({player.x, player.y, 1.25f*defvelX * distX / distance, 1.25f*defvelY * distY/distance, 0, 1,1, 50, 'p',0});
 	}
 }
 
-bool game::hitDetection(const sEntity o)
+bool game::hitDetection(const sEntity o, const sEntity entity)
 {
 	int oX = int(o.x);
 	int oY = int(o.y);
-	for(auto &e : vecEnemy1){
+	for(auto &e : entity){
 		int oX = (o.x);
 		int oY = int(o.y);
-		if(oX >= int(e.x) + int(vecModelEnemy1[0].first)  && // left side
-		   oX <= int(e.x) + int(vecModelEnemy1[1].first)  && // right side
-		   oY <= int(e.y) + int(vecModelEnemy1[0].second) && // top side
-		   oY >= int(e.y) + int(vecModelEnemy1[2].second)    // bot side
+		if(oX >= int(e.x) + int(entity[0].first)  && // left side
+		   oX <= int(e.x) + int(entity[1].first)  && // right side
+		   oY <= int(e.y) + int(entity[0].second) && // top side
+		   oY >= int(e.y) + int(entity[2].second)    // bot side
 		  ){ e.hp -= o.dmg;  return true;}
 	}
 	return false;
@@ -195,10 +198,10 @@ void game::removeBullets()
 }
 
 void game::removeEnemies(){
-	auto i = remove_if(vecEnemy1.begin(), vecEnemy1.end(), [&](sEntity o){return o.hp <=0; });
-	if( i != vecEnemy1.end()){
+	auto i = remove_if(vecEntity.begin(), vecEntity.end(), [&](sEntity o){return o.hp <=0; });
+	if( i != vecEntity.end()){
 		score.incScore( i->totalhp/2);
-		vecEnemy1.erase(i);
+		vecEntity.erase(i);
 	}
 }
 
@@ -212,7 +215,7 @@ void game::spawnEnemies()
 		}while( 
 			( (enemy1.x - player.x)*(enemy1.x - player.x) + (enemy1.y - player.y)*(enemy1.y - player.y) ) <= 1000
 		 );
-		vecEnemy1.push_back(enemy1);
+		vecEntity.push_back(enemy1);
 	}
 }
 
@@ -342,6 +345,5 @@ void game::enemyShoot(const sEntity o, int chance)
 	if(roll < chance){
 		vecBullets.push_back({o.x, o.y, 1.25f*defvelX * distX / distance, 
 								1.25f*defvelY * distY/distance, 0, 1,1, 50});
-
 	}
 }

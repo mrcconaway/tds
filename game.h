@@ -21,6 +21,7 @@ private:
 		int hp;
 		int totalhp;
 		int dmg;
+		char id;
 		int luck; 
 	};
 	enum STATE
@@ -43,7 +44,7 @@ public:
 
 	void getPlayerInput();
 
-	bool hitDetection(const sEntity o);
+	bool hitDetection(const sEntity o, const sEntity entity);
 	bool playerHitDetection();
 
 	void removeBullets();
@@ -74,7 +75,7 @@ private:
 									 // Each enemy takes off 1 hp point(s) (bullets defualt to 1 hp)
 
 	sEntity enemy1;
-	std::vector<sEntity> vecEnemy1;
+	std::vector<sEntity> vecEntity;
 	std::vector<std::pair<float,float>> vecModelEnemy1;
 
 
