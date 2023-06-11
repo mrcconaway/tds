@@ -21,6 +21,7 @@ private:
 		int hp;
 		int totalhp;
 		int dmg;
+		int luck; 
 	};
 	enum STATE
 	{
@@ -48,6 +49,8 @@ public:
 	void removeBullets();
 	void removeEnemies();
 	void spawnEnemies();
+
+	void enemyShoot(const sEntity o, int chance);
 
 	bool OnUserCreate()override;
 	bool OnUserUpdate(float fElapsedTime) override;
@@ -79,6 +82,7 @@ private:
 	float defvelY = 50.0f;
 	int defhp = 100;
 	int defdmg = 25;
+	int defluck = 10;
 
 	float SWR; // Screen Width Ratio
 	float SHR; // Screen Height Ratio

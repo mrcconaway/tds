@@ -91,7 +91,8 @@ void game::reset()
 			  0, 									    // angle
 			  defhp,                                    // hp
 			  100,										// total hp
-			  defdmg};                                  // dmg 
+			  defdmg,                                   // dmg 
+			  defluck};									// default luck
 
 
 	vecModelPlayer = {{ -5.0f , +6.0f },
@@ -107,7 +108,8 @@ void game::reset()
 			  0,
 			  100,
 			  100,
-			  defdmg };
+			  defdmg, 
+			  defluck};
 	vecEnemy1.push_back(enemy1);
 
 
@@ -202,7 +204,7 @@ void game::removeEnemies(){
 
 void game::spawnEnemies()
 {
-	int spawn = rand() % 10000 + 1;
+	int spawn = rand() % 100000 ;
 	if(spawn < 11){
 		do{
 			enemy1.x = float(rand() % ScreenWidth() );
@@ -315,6 +317,7 @@ void game::drawEnemies()
 		float distance = sqrtf(distX * distX + distY * distY );
 		e.x += e.dx * distX / distance * GetElapsedTime();
 		e.y += e.dy * distY/distance * GetElapsedTime();
+		enemyShoot(e, e.luck);
 		drawWireFrameModel(vecModelEnemy1, e.x, e.y, e.angle, SWR, SHR, olc::Pixel(0,0,255));
 		if(e.hp >= 0){
 			DrawLine(int(e.x + vecModelEnemy1[0].first), int(e.y + vecModelEnemy1[2].second)-2, 
@@ -328,4 +331,17 @@ int game::getInvulnTime()const
 {
     std::chrono::high_resolution_clock::time_point tmp = std::chrono::high_resolution_clock::now();
     return std::chrono::duration_cast<std::chrono::seconds>(tmp - invulnTimer).count();
+}
+
+void game::enemyShoot(const sEntity o, int chance)
+{
+	int roll = int(rand() % 100);
+	float distX = o.x - player.x;
+	float distY = o.y - player.y;
+	float distance = sqrtf(distX * distX + distY * distY );
+	if(roll < chance){
+		vecBullets.push_back({o.x, o.y, 1.25f*defvelX * distX / distance, 
+								1.25f*defvelY * distY/distance, 0, 1,1, 50});
+
+	}
 }
